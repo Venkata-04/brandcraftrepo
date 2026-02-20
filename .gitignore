@@ -1,0 +1,6 @@
+cd ~/Downloads/BizForgeGenAI
+echo "backend/.env
+backend/venv/
+backend/__pycache__/
+backend/*.pyc
+frontend/static/generated_logos/*.png

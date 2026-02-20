@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BizForge — AI Branding Suite</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --surface: #13131a;
+      --surface2: #1c1c28;
+      --accent: #7c5cfc;
+      --accent2: #fc5c7d;
+      --accent3: #43e8d8;
+      --text: #f0eeff;
+      --muted: #8b88a8;
+      --border: rgba(124,92,252,0.2);
+      --card-bg: rgba(28,28,40,0.8);
+    }
+    .light {
+      --bg: #f5f3ff;
+      --surface: #ffffff;
+      --surface2: #ede9ff;
+      --text: #1a1a2e;
+      --muted: #6b68a8;
+      --border: rgba(124,92,252,0.25);
+      --card-bg: rgba(255,255,255,0.9);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      transition: background 0.3s, color 0.3s;
+      overflow-x: hidden;
+    }
+
+    /* ── ANIMATED BG ── */
+    .bg-orbs {
+      position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden;
+    }
+    .orb {
+      position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.18;
+      animation: drift 12s ease-in-out infinite alternate;
+    }
+    .orb1 { width: 500px; height: 500px; background: var(--accent); top: -100px; left: -100px; animation-delay: 0s; }
+    .orb2 { width: 400px; height: 400px; background: var(--accent2); bottom: -80px; right: -80px; animation-delay: 3s; }
+    .orb3 { width: 300px; height: 300px; background: var(--accent3); top: 40%; left: 55%; animation-delay: 6s; }
+    @keyframes drift {
+      from { transform: translate(0, 0) scale(1); }
+      to   { transform: translate(30px, 20px) scale(1.08); }
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1rem 2.5rem;
+      background: rgba(10,10,15,0.75);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+    .light nav { background: rgba(245,243,255,0.8); }
+    .logo {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.6rem; font-weight: 800;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      text-decoration: none;
+    }
+    .nav-controls { display: flex; align-items: center; gap: 1rem; }
+    select, .theme-btn {
+      background: var(--surface2); color: var(--text);
+      border: 1px solid var(--border); border-radius: 8px;
+      padding: 0.45rem 0.9rem; font-size: 0.85rem; cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    select:hover, .theme-btn:hover { border-color: var(--accent); }
+    .theme-btn { font-size: 1.1rem; padding: 0.4rem 0.7rem; }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative; z-index: 1;
+      min-height: 90vh; display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center; padding: 4rem 2rem;
+    }
+    .badge {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: rgba(124,92,252,0.15);
+      border: 1px solid rgba(124,92,252,0.35);
+      border-radius: 999px; padding: 0.35rem 1rem;
+      font-size: 0.8rem; color: var(--accent); letter-spacing: 0.08em;
+      margin-bottom: 1.8rem;
+      animation: fadeUp 0.6s ease both;
+    }
+    .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent3); animation: pulse 1.5s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(1.4)} }
+
+    h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(2.8rem, 6vw, 5rem);
+      font-weight: 800; line-height: 1.08;
+      margin-bottom: 1.4rem;
+      animation: fadeUp 0.7s 0.1s ease both;
+    }
+    h1 span {
+      background: linear-gradient(135deg, var(--accent), var(--accent2), var(--accent3));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .hero-sub {
+      font-size: 1.15rem; color: var(--muted); max-width: 560px;
+      line-height: 1.7; margin-bottom: 2.4rem;
+      animation: fadeUp 0.7s 0.2s ease both;
+    }
+    .hero-cta {
+      display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center;
+      animation: fadeUp 0.7s 0.3s ease both;
+    }
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: #fff; padding: 0.85rem 2rem;
+      border-radius: 12px; font-weight: 600; font-size: 1rem;
+      text-decoration: none; border: none; cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 8px 24px rgba(124,92,252,0.35);
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(124,92,252,0.5); }
+    .btn-secondary {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: transparent; color: var(--text);
+      padding: 0.85rem 2rem; border-radius: 12px;
+      font-weight: 500; font-size: 1rem;
+      text-decoration: none;
+      border: 1px solid var(--border);
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .btn-secondary:hover { border-color: var(--accent); background: rgba(124,92,252,0.08); }
+
+    @keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:none} }
+
+    /* ── STATS ── */
+    .stats {
+      display: flex; gap: 3rem; justify-content: center; flex-wrap: wrap;
+      margin-top: 4rem;
+      animation: fadeUp 0.7s 0.5s ease both;
+    }
+    .stat { text-align: center; }
+    .stat-num { font-family:'Syne',sans-serif; font-size:2rem; font-weight:800; color:var(--accent); }
+    .stat-label { font-size:0.8rem; color:var(--muted); letter-spacing:0.05em; }
+
+    /* ── FEATURES ── */
+    .section { position: relative; z-index: 1; padding: 5rem 2rem; }
+    .section-label {
+      text-align: center; font-size:0.78rem; letter-spacing:0.12em;
+      color: var(--accent); text-transform:uppercase; margin-bottom:0.8rem;
+    }
+    .section-title {
+      font-family:'Syne',sans-serif; font-size:clamp(1.8rem,3.5vw,2.8rem);
+      font-weight:800; text-align:center; margin-bottom:3.5rem;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem; max-width: 1100px; margin: 0 auto;
+    }
+    .feature-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 20px; padding: 2rem;
+      text-decoration: none; color: var(--text);
+      transition: transform 0.25s, border-color 0.25s, box-shadow 0.25s;
+      backdrop-filter: blur(12px);
+      position: relative; overflow: hidden;
+    }
+    .feature-card::before {
+      content:''; position:absolute; inset:0;
+      background: linear-gradient(135deg, rgba(124,92,252,0.06), transparent);
+      opacity:0; transition:opacity 0.3s;
+    }
+    .feature-card:hover { transform:translateY(-4px); border-color:var(--accent); box-shadow:0 16px 40px rgba(124,92,252,0.15); }
+    .feature-card:hover::before { opacity:1; }
+    .feature-icon { font-size:2rem; margin-bottom:1rem; display:block; }
+    .feature-card h3 { font-family:'Syne',sans-serif; font-size:1.1rem; font-weight:700; margin-bottom:0.5rem; }
+    .feature-card p { font-size:0.9rem; color:var(--muted); line-height:1.6; }
+    .feature-card .arrow { margin-top:1.2rem; font-size:0.85rem; color:var(--accent); font-weight:500; display:inline-flex; align-items:center; gap:0.3rem; }
+
+    /* ── WHY SECTION ── */
+    .why-section {
+      background: var(--surface); position:relative; z-index:1;
+      padding: 5rem 2rem; border-top:1px solid var(--border); border-bottom:1px solid var(--border);
+    }
+    .why-grid {
+      display:grid; grid-template-columns: repeat(auto-fit, minmax(200px,1fr));
+      gap:2rem; max-width:900px; margin:0 auto;
+    }
+    .why-item { text-align:center; padding:1.5rem 1rem; }
+    .why-item .icon { font-size:2.2rem; margin-bottom:0.8rem; }
+    .why-item h4 { font-family:'Syne',sans-serif; font-weight:700; margin-bottom:0.4rem; }
+    .why-item p { font-size:0.85rem; color:var(--muted); line-height:1.6; }
+
+    /* ── FOOTER ── */
+    footer {
+      position:relative; z-index:1;
+      text-align:center; padding:2rem;
+      font-size:0.82rem; color:var(--muted);
+      border-top: 1px solid var(--border);
+    }
+    footer span { color:var(--accent); }
+
+    @media(max-width:600px) {
+      nav { padding:1rem 1.2rem; }
+      .stats { gap:1.5rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-orbs">
+    <div class="orb orb1"></div>
+    <div class="orb orb2"></div>
+    <div class="orb orb3"></div>
+  </div>
+
+  <!-- NAV -->
+  <nav>
+    <a href="/" class="logo">⚡ BizForge</a>
+    <div class="nav-controls">
+      <select id="lang-select" onchange="changeLanguage(this.value)" title="Language">
+        <option value="en">🌐 English</option>
+        <option value="es">🇪🇸 Español</option>
+        <option value="fr">🇫🇷 Français</option>
+        <option value="de">🇩🇪 Deutsch</option>
+        <option value="hi">🇮🇳 हिंदी</option>
+      </select>
+      <button class="theme-btn" onclick="toggleTheme()" title="Toggle theme">🌙</button>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="badge"><span class="dot"></span> Powered by IBM Granite · Groq · SDXL</div>
+    <h1>Build Your Brand<br>with <span>AI Power</span></h1>
+    <p class="hero-sub">Create stunning brand names, logos, marketing content, and complete design systems in seconds — not hours.</p>
+    <div class="hero-cta">
+      <a href="/branding" class="btn-primary">Get Started →</a>
+      <a href="#features" class="btn-secondary">See Features</a>
+    </div>
+    <div class="stats">
+      <div class="stat"><div class="stat-num">9+</div><div class="stat-label">AI TOOLS</div></div>
+      <div class="stat"><div class="stat-num">3</div><div class="stat-label">AI MODELS</div></div>
+      <div class="stat"><div class="stat-num">5</div><div class="stat-label">LANGUAGES</div></div>
+      <div class="stat"><div class="stat-num">∞</div><div class="stat-label">IDEAS</div></div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="section" id="features">
+    <p class="section-label">What BizForge Can Do</p>
+    <h2 class="section-title">Everything You Need to Brand Smarter</h2>
+    <div class="features-grid">
+      <a href="/branding?tab=brand" class="feature-card">
+        <span class="feature-icon">🔤</span>
+        <h3>Brand Names</h3>
+        <p>Generate 10+ creative, memorable brand names with taglines tailored to your industry and tone.</p>
+        <div class="arrow">Explore →</div>
+      </a>
+      <a href="/branding?tab=logo" class="feature-card">
+        <span class="feature-icon">🎨</span>
+        <h3>Logo Generator</h3>
+        <p>Get AI-powered logo concepts and full-color images using Stable Diffusion XL.</p>
+        <div class="arrow">Explore →</div>
+      </a>
+      <a href="/branding?tab=content" class="feature-card">
+        <span class="feature-icon">📝</span>
+        <h3>Marketing Content</h3>
+        <p>Create product descriptions, social posts, ad copy, and emails in your brand voice.</p>
+        <div class="arrow">Explore →</div>
+      </a>
+      <a href="/branding?tab=design" class="feature-card">
+        <span class="feature-icon">🖌️</span>
+        <h3>Design System</h3>
+        <p>Get curated color palettes, font pairings, and visual identity guidance instantly.</p>
+        <div class="arrow">Explore →</div>
+      </a>
+      <a href="/branding?tab=sentiment" class="feature-card">
+        <span class="feature-icon">🧠</span>
+        <h3>Sentiment Analysis</h3>
+        <p>Analyze customer reviews for sentiment, tone, and brand-alignment with professional rewrites.</p>
+        <div class="arrow">Explore →</div>
+      </a>
+      <a href="/branding?tab=chat" class="feature-card">
+        <span class="feature-icon">💬</span>
+        <h3>Branding Chat</h3>
+        <p>Chat with IBM Granite for expert branding strategy, naming ideas, and creative direction.</p>
+        <div class="arrow">Explore →</div>
+      </a>
+    </div>
+  </section>
+
+  <!-- WHY -->
+  <section class="why-section">
+    <p class="section-label">Why BizForge</p>
+    <h2 class="section-title" style="margin-bottom:2.5rem;">Built for Builders</h2>
+    <div class="why-grid">
+      <div class="why-item"><div class="icon">⚡</div><h4>Instant Results</h4><p>Sub-second outputs powered by Groq's ultra-low latency infrastructure.</p></div>
+      <div class="why-item"><div class="icon">🤖</div><h4>Multi-Model AI</h4><p>IBM Granite, LLaMA-3.3-70B, and SDXL working together for best results.</p></div>
+      <div class="why-item"><div class="icon">🌍</div><h4>Multilingual</h4><p>Generate branding content in English, Spanish, French, German, and Hindi.</p></div>
+      <div class="why-item"><div class="icon">🎙️</div><h4>Voice Input</h4><p>Speak your ideas and let BizForge transcribe and generate content instantly.</p></div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>© 2025 <span>BizForge</span> — Powered by IBM Granite · Groq AI · Stable Diffusion XL</p>
+  </footer>
+
+  <script>
+    let isDark = true;
+    function toggleTheme() {
+      isDark = !isDark;
+      document.body.classList.toggle('light', !isDark);
+      document.querySelector('.theme-btn').textContent = isDark ? '🌙' : '☀️';
+    }
+    function changeLanguage(lang) {
+      // Store preference
+      localStorage.setItem('bf_lang', lang);
+    }
+    // Init
+    const savedLang = localStorage.getItem('bf_lang');
+    if (savedLang) document.getElementById('lang-select').value = savedLang;
+  </script>
+</body>
+</html>
