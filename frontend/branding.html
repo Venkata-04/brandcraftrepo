@@ -1,554 +1,1022 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BizForge — Branding Tools</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
-  <style>
-    :root {
-      --bg: #0a0a0f;
-      --surface: #13131a;
-      --surface2: #1c1c28;
-      --accent: #7c5cfc;
-      --accent2: #fc5c7d;
-      --accent3: #43e8d8;
-      --text: #f0eeff;
-      --muted: #8b88a8;
-      --border: rgba(124,92,252,0.2);
-      --card-bg: rgba(28,28,40,0.9);
-      --input-bg: rgba(19,19,26,0.8);
-    }
-    .light {
-      --bg:#f5f3ff; --surface:#fff; --surface2:#ede9ff; --text:#1a1a2e;
-      --muted:#6b68a8; --border:rgba(124,92,252,0.25); --card-bg:rgba(255,255,255,0.95);
-      --input-bg:#fff;
-    }
-    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-    body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;transition:background 0.3s,color 0.3s;overflow-x:hidden;}
-
-    /* BG */
-    .bg-orbs{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;}
-    .orb{position:absolute;border-radius:50%;filter:blur(100px);opacity:0.12;animation:drift 14s ease-in-out infinite alternate;}
-    .orb1{width:600px;height:600px;background:var(--accent);top:-150px;left:-150px;}
-    .orb2{width:400px;height:400px;background:var(--accent2);bottom:-100px;right:-100px;animation-delay:4s;}
-    @keyframes drift{from{transform:translate(0,0)}to{transform:translate(25px,15px)}}
-
-    /* NAV */
-    nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:1rem 2rem;background:rgba(10,10,15,0.8);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);}
-    .light nav{background:rgba(245,243,255,0.85);}
-    .logo{font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:800;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-decoration:none;}
-    .nav-right{display:flex;align-items:center;gap:0.8rem;}
-    .home-link{color:var(--muted);text-decoration:none;font-size:0.85rem;padding:0.4rem 0.8rem;border:1px solid var(--border);border-radius:8px;transition:border-color 0.2s,color 0.2s;}
-    .home-link:hover{border-color:var(--accent);color:var(--text);}
-    select,.theme-btn{background:var(--surface2);color:var(--text);border:1px solid var(--border);border-radius:8px;padding:0.4rem 0.8rem;font-size:0.82rem;cursor:pointer;}
-    .theme-btn{font-size:1rem;padding:0.38rem 0.65rem;}
-
-    /* LAYOUT */
-    .layout{display:flex;position:relative;z-index:1;min-height:calc(100vh - 65px);}
-
-    /* SIDEBAR */
-    .sidebar{width:220px;flex-shrink:0;padding:1.5rem 1rem;border-right:1px solid var(--border);background:rgba(19,19,26,0.6);backdrop-filter:blur(12px);}
-    .light .sidebar{background:rgba(255,255,255,0.7);}
-    .sidebar h4{font-size:0.7rem;text-transform:uppercase;letter-spacing:0.12em;color:var(--muted);margin-bottom:0.8rem;padding:0 0.5rem;}
-    .tab-btn{display:flex;align-items:center;gap:0.6rem;width:100%;padding:0.7rem 0.8rem;border:none;background:transparent;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:0.9rem;border-radius:10px;cursor:pointer;transition:background 0.2s,color 0.2s;text-align:left;margin-bottom:0.2rem;}
-    .tab-btn:hover{background:rgba(124,92,252,0.1);color:var(--text);}
-    .tab-btn.active{background:linear-gradient(135deg,rgba(124,92,252,0.25),rgba(252,92,125,0.1));color:var(--text);font-weight:500;border:1px solid rgba(124,92,252,0.3);}
-
-    /* MAIN */
-    .main-content{flex:1;padding:2rem;overflow-y:auto;max-width:900px;}
-
-    /* PANEL */
-    .tab-panel{display:none;animation:fadeIn 0.3s ease;}
-    .tab-panel.active{display:block;}
-    @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-
-    .page-header{margin-bottom:2rem;}
-    .page-header h1{font-family:'Syne',sans-serif;font-size:1.8rem;font-weight:800;margin-bottom:0.3rem;}
-    .page-header p{color:var(--muted);font-size:0.9rem;}
-
-    /* CARDS */
-    .card{background:var(--card-bg);border:1px solid var(--border);border-radius:18px;padding:1.8rem;margin-bottom:1.5rem;backdrop-filter:blur(10px);}
-
-    /* FORM */
-    .form-group{margin-bottom:1.2rem;}
-    label{display:block;font-size:0.82rem;font-weight:500;color:var(--muted);margin-bottom:0.4rem;letter-spacing:0.04em;}
-    input[type=text],textarea,select.form-select{width:100%;background:var(--input-bg);color:var(--text);border:1px solid var(--border);border-radius:10px;padding:0.75rem 1rem;font-family:'DM Sans',sans-serif;font-size:0.9rem;outline:none;transition:border-color 0.2s,box-shadow 0.2s;}
-    input[type=text]:focus,textarea:focus,select.form-select:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(124,92,252,0.12);}
-    textarea{resize:vertical;min-height:100px;}
-    select.form-select{appearance:none;cursor:pointer;}
-
-    /* BUTTONS */
-    .btn{display:inline-flex;align-items:center;gap:0.5rem;padding:0.8rem 1.8rem;border:none;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:0.9rem;font-weight:600;cursor:pointer;transition:transform 0.2s,box-shadow 0.2s,opacity 0.2s;width:100%;justify-content:center;}
-    .btn-grad{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;box-shadow:0 6px 20px rgba(124,92,252,0.3);}
-    .btn-grad:hover{transform:translateY(-1px);box-shadow:0 10px 28px rgba(124,92,252,0.45);}
-    .btn-grad:disabled{opacity:0.5;cursor:not-allowed;transform:none;}
-
-    /* OUTPUT */
-    .output-box{background:rgba(124,92,252,0.05);border:1px solid rgba(124,92,252,0.15);border-radius:12px;padding:1.2rem;white-space:pre-wrap;line-height:1.8;font-size:0.9rem;min-height:80px;margin-top:1.2rem;word-break:break-word;}
-    .output-box.hidden{display:none;}
-    .output-box.error{border-color:rgba(252,92,125,0.4);background:rgba(252,92,125,0.05);color:var(--accent2);}
-
-    /* SPINNER */
-    .spinner{display:inline-block;width:18px;height:18px;border:2px solid rgba(255,255,255,0.3);border-top-color:#fff;border-radius:50%;animation:spin 0.7s linear infinite;}
-    @keyframes spin{to{transform:rotate(360deg)}}
-
-    /* LOGO IMAGE */
-    .logo-preview{margin-top:1.2rem;text-align:center;}
-    .logo-preview img{max-width:100%;max-height:350px;border-radius:14px;border:1px solid var(--border);box-shadow:0 8px 30px rgba(0,0,0,0.3);}
-    .logo-preview.hidden{display:none;}
-
-    /* CHAT */
-    .chat-box{background:var(--input-bg);border:1px solid var(--border);border-radius:14px;padding:1.2rem;height:360px;overflow-y:auto;display:flex;flex-direction:column;gap:0.8rem;margin-bottom:1rem;}
-    .msg{padding:0.75rem 1rem;border-radius:12px;font-size:0.88rem;line-height:1.6;max-width:80%;}
-    .msg.bot{background:rgba(124,92,252,0.12);border:1px solid rgba(124,92,252,0.2);align-self:flex-start;}
-    .msg.user{background:linear-gradient(135deg,rgba(124,92,252,0.3),rgba(252,92,125,0.2));align-self:flex-end;}
-    .chat-input-row{display:flex;gap:0.8rem;}
-    .chat-input-row input{flex:1;}
-    .chat-input-row .btn{width:auto;padding:0.75rem 1.4rem;}
-
-    /* VOICE */
-    .voice-row{display:flex;gap:0.8rem;align-items:center;margin-top:0.6rem;}
-    .voice-btn{background:rgba(67,232,216,0.15);border:1px solid rgba(67,232,216,0.35);color:var(--accent3);border-radius:10px;padding:0.6rem 1rem;cursor:pointer;font-size:0.85rem;transition:background 0.2s;}
-    .voice-btn:hover{background:rgba(67,232,216,0.25);}
-    .voice-btn.recording{background:rgba(252,92,125,0.2);border-color:rgba(252,92,125,0.5);color:var(--accent2);animation:pulse-btn 1s infinite;}
-    @keyframes pulse-btn{0%,100%{opacity:1}50%{opacity:0.6}}
-
-    /* FORM GRID */
-    .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
-    @media(max-width:700px){.layout{flex-direction:column;}.sidebar{width:100%;border-right:none;border-bottom:1px solid var(--border);padding:1rem;}.sidebar-tabs{display:flex;flex-wrap:wrap;gap:0.4rem;}.sidebar h4{display:none;}.tab-btn{flex:1;min-width:80px;font-size:0.78rem;padding:0.5rem;}.main-content{padding:1rem;}.form-grid{grid-template-columns:1fr;}}
-  </style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BizForge — Branding Tools</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+    <style>
+         :root {
+            --bg: #0a0a0f;
+            --surface: #13131a;
+            --surface2: #1c1c28;
+            --accent: #7c5cfc;
+            --accent2: #fc5c7d;
+            --accent3: #43e8d8;
+            --text: #f0eeff;
+            --muted: #8b88a8;
+            --border: rgba(124, 92, 252, 0.2);
+            --card-bg: rgba(28, 28, 40, 0.9);
+            --input-bg: rgba(19, 19, 26, 0.8);
+        }
+        
+        .light {
+            --bg: #f5f3ff;
+            --surface: #fff;
+            --surface2: #ede9ff;
+            --text: #1a1a2e;
+            --muted: #6b68a8;
+            --border: rgba(124, 92, 252, 0.25);
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --input-bg: #fff;
+        }
+        
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            transition: background 0.3s, color 0.3s;
+            overflow-x: hidden;
+        }
+        /* BG */
+        
+        .bg-orbs {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+        
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.12;
+            animation: drift 14s ease-in-out infinite alternate;
+        }
+        
+        .orb1 {
+            width: 600px;
+            height: 600px;
+            background: var(--accent);
+            top: -150px;
+            left: -150px;
+        }
+        
+        .orb2 {
+            width: 400px;
+            height: 400px;
+            background: var(--accent2);
+            bottom: -100px;
+            right: -100px;
+            animation-delay: 4s;
+        }
+        
+        @keyframes drift {
+            from {
+                transform: translate(0, 0)
+            }
+            to {
+                transform: translate(25px, 15px)
+            }
+        }
+        /* NAV */
+        
+        nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 2rem;
+            background: rgba(10, 10, 15, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .light nav {
+            background: rgba(245, 243, 255, 0.85);
+        }
+        
+        .logo {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-decoration: none;
+        }
+        
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+        
+        .home-link {
+            color: var(--muted);
+            text-decoration: none;
+            font-size: 0.85rem;
+            padding: 0.4rem 0.8rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            transition: border-color 0.2s, color 0.2s;
+        }
+        
+        .home-link:hover {
+            border-color: var(--accent);
+            color: var(--text);
+        }
+        
+        select,
+        .theme-btn {
+            background: var(--surface2);
+            color: var(--text);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 0.4rem 0.8rem;
+            font-size: 0.82rem;
+            cursor: pointer;
+        }
+        
+        .theme-btn {
+            font-size: 1rem;
+            padding: 0.38rem 0.65rem;
+        }
+        /* LAYOUT */
+        
+        .layout {
+            display: flex;
+            position: relative;
+            z-index: 1;
+            min-height: calc(100vh - 65px);
+        }
+        /* SIDEBAR */
+        
+        .sidebar {
+            width: 220px;
+            flex-shrink: 0;
+            padding: 1.5rem 1rem;
+            border-right: 1px solid var(--border);
+            background: rgba(19, 19, 26, 0.6);
+            backdrop-filter: blur(12px);
+        }
+        
+        .light .sidebar {
+            background: rgba(255, 255, 255, 0.7);
+        }
+        
+        .sidebar h4 {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: var(--muted);
+            margin-bottom: 0.8rem;
+            padding: 0 0.5rem;
+        }
+        
+        .tab-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            width: 100%;
+            padding: 0.7rem 0.8rem;
+            border: none;
+            background: transparent;
+            color: var(--muted);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.9rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s;
+            text-align: left;
+            margin-bottom: 0.2rem;
+        }
+        
+        .tab-btn:hover {
+            background: rgba(124, 92, 252, 0.1);
+            color: var(--text);
+        }
+        
+        .tab-btn.active {
+            background: linear-gradient(135deg, rgba(124, 92, 252, 0.25), rgba(252, 92, 125, 0.1));
+            color: var(--text);
+            font-weight: 500;
+            border: 1px solid rgba(124, 92, 252, 0.3);
+        }
+        /* MAIN */
+        
+        .main-content {
+            flex: 1;
+            padding: 2rem;
+            overflow-y: auto;
+            max-width: 900px;
+        }
+        /* PANEL */
+        
+        .tab-panel {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .tab-panel.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(8px)
+            }
+            to {
+                opacity: 1;
+                transform: none
+            }
+        }
+        
+        .page-header {
+            margin-bottom: 2rem;
+        }
+        
+        .page-header h1 {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin-bottom: 0.3rem;
+        }
+        
+        .page-header p {
+            color: var(--muted);
+            font-size: 0.9rem;
+        }
+        /* CARDS */
+        
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 1.8rem;
+            margin-bottom: 1.5rem;
+            backdrop-filter: blur(10px);
+        }
+        /* FORM */
+        
+        .form-group {
+            margin-bottom: 1.2rem;
+        }
+        
+        label {
+            display: block;
+            font-size: 0.82rem;
+            font-weight: 500;
+            color: var(--muted);
+            margin-bottom: 0.4rem;
+            letter-spacing: 0.04em;
+        }
+        
+        input[type=text],
+        textarea,
+        select.form-select {
+            width: 100%;
+            background: var(--input-bg);
+            color: var(--text);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 0.75rem 1rem;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.9rem;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        
+        input[type=text]:focus,
+        textarea:focus,
+        select.form-select:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(124, 92, 252, 0.12);
+        }
+        
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+        
+        select.form-select {
+            appearance: none;
+            cursor: pointer;
+        }
+        /* BUTTONS */
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.8rem 1.8rem;
+            border: none;
+            border-radius: 10px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s;
+            width: 100%;
+            justify-content: center;
+        }
+        
+        .btn-grad {
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            color: #fff;
+            box-shadow: 0 6px 20px rgba(124, 92, 252, 0.3);
+        }
+        
+        .btn-grad:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 10px 28px rgba(124, 92, 252, 0.45);
+        }
+        
+        .btn-grad:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        /* OUTPUT */
+        
+        .output-box {
+            background: rgba(124, 92, 252, 0.05);
+            border: 1px solid rgba(124, 92, 252, 0.15);
+            border-radius: 12px;
+            padding: 1.2rem;
+            white-space: pre-wrap;
+            line-height: 1.8;
+            font-size: 0.9rem;
+            min-height: 80px;
+            margin-top: 1.2rem;
+            word-break: break-word;
+        }
+        
+        .output-box.hidden {
+            display: none;
+        }
+        
+        .output-box.error {
+            border-color: rgba(252, 92, 125, 0.4);
+            background: rgba(252, 92, 125, 0.05);
+            color: var(--accent2);
+        }
+        /* SPINNER */
+        
+        .spinner {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top-color: #fff;
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+        }
+        
+        @keyframes spin {
+            to {
+                transform: rotate(360deg)
+            }
+        }
+        /* LOGO IMAGE */
+        
+        .logo-preview {
+            margin-top: 1.2rem;
+            text-align: center;
+        }
+        
+        .logo-preview img {
+            max-width: 100%;
+            max-height: 350px;
+            border-radius: 14px;
+            border: 1px solid var(--border);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .logo-preview.hidden {
+            display: none;
+        }
+        /* CHAT */
+        
+        .chat-box {
+            background: var(--input-bg);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 1.2rem;
+            height: 360px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+            margin-bottom: 1rem;
+        }
+        
+        .msg {
+            padding: 0.75rem 1rem;
+            border-radius: 12px;
+            font-size: 0.88rem;
+            line-height: 1.6;
+            max-width: 80%;
+        }
+        
+        .msg.bot {
+            background: rgba(124, 92, 252, 0.12);
+            border: 1px solid rgba(124, 92, 252, 0.2);
+            align-self: flex-start;
+        }
+        
+        .msg.user {
+            background: linear-gradient(135deg, rgba(124, 92, 252, 0.3), rgba(252, 92, 125, 0.2));
+            align-self: flex-end;
+        }
+        
+        .chat-input-row {
+            display: flex;
+            gap: 0.8rem;
+        }
+        
+        .chat-input-row input {
+            flex: 1;
+        }
+        
+        .chat-input-row .btn {
+            width: auto;
+            padding: 0.75rem 1.4rem;
+        }
+        /* VOICE */
+        
+        .voice-row {
+            display: flex;
+            gap: 0.8rem;
+            align-items: center;
+            margin-top: 0.6rem;
+        }
+        
+        .voice-btn {
+            background: rgba(67, 232, 216, 0.15);
+            border: 1px solid rgba(67, 232, 216, 0.35);
+            color: var(--accent3);
+            border-radius: 10px;
+            padding: 0.6rem 1rem;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: background 0.2s;
+        }
+        
+        .voice-btn:hover {
+            background: rgba(67, 232, 216, 0.25);
+        }
+        
+        .voice-btn.recording {
+            background: rgba(252, 92, 125, 0.2);
+            border-color: rgba(252, 92, 125, 0.5);
+            color: var(--accent2);
+            animation: pulse-btn 1s infinite;
+        }
+        
+        @keyframes pulse-btn {
+            0%,
+            100% {
+                opacity: 1
+            }
+            50% {
+                opacity: 0.6
+            }
+        }
+        /* FORM GRID */
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+        
+        @media(max-width:700px) {
+            .layout {
+                flex-direction: column;
+            }
+            .sidebar {
+                width: 100%;
+                border-right: none;
+                border-bottom: 1px solid var(--border);
+                padding: 1rem;
+            }
+            .sidebar-tabs {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 0.4rem;
+            }
+            .sidebar h4 {
+                display: none;
+            }
+            .tab-btn {
+                flex: 1;
+                min-width: 80px;
+                font-size: 0.78rem;
+                padding: 0.5rem;
+            }
+            .main-content {
+                padding: 1rem;
+            }
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
-<body>
-<div class="bg-orbs"><div class="orb orb1"></div><div class="orb orb2"></div></div>
 
-<!-- NAV -->
-<nav>
-  <a href="/" class="logo">⚡ BizForge</a>
-  <div class="nav-right">
-    <a href="/" class="home-link">← Home</a>
-    <select onchange="changeLanguage(this.value)" title="Language">
+<body>
+    <div class="bg-orbs">
+        <div class="orb orb1"></div>
+        <div class="orb orb2"></div>
+    </div>
+
+    <!-- NAV -->
+    <nav>
+        <a href="/" class="logo">⚡ BizForge</a>
+        <div class="nav-right">
+            <a href="/" class="home-link">← Home</a>
+            <select onchange="changeLanguage(this.value)" title="Language">
       <option value="en">🌐 EN</option>
       <option value="es">🇪🇸 ES</option>
       <option value="fr">🇫🇷 FR</option>
       <option value="de">🇩🇪 DE</option>
       <option value="hi">🇮🇳 HI</option>
     </select>
-    <button class="theme-btn" onclick="toggleTheme()" title="Toggle theme">🌙</button>
-  </div>
-</nav>
-
-<div class="layout">
-  <!-- SIDEBAR -->
-  <aside class="sidebar">
-    <h4>Tools</h4>
-    <div class="sidebar-tabs">
-      <button class="tab-btn active" onclick="switchTab('brand', this)">🔤 Brand Names</button>
-      <button class="tab-btn" onclick="switchTab('logo', this)">🎨 Logo Generator</button>
-      <button class="tab-btn" onclick="switchTab('content', this)">📝 Marketing Content</button>
-      <button class="tab-btn" onclick="switchTab('design', this)">🖌️ Design System</button>
-      <button class="tab-btn" onclick="switchTab('sentiment', this)">🧠 Review Analyzer</button>
-      <button class="tab-btn" onclick="switchTab('chat', this)">💬 Branding Chat</button>
-    </div>
-  </aside>
-
-  <!-- MAIN -->
-  <main class="main-content">
-
-    <!-- ── BRAND NAMES ── -->
-    <div id="panel-brand" class="tab-panel active">
-      <div class="page-header">
-        <h1>🔤 Brand Names Generator</h1>
-        <p>Enter keywords and generate creative, memorable brand names with AI.</p>
-      </div>
-      <div class="card">
-        <div class="form-group">
-          <label>Keywords / Themes</label>
-          <input type="text" id="brand-keywords" placeholder="e.g., smart, innovative, affordable" />
-          <div class="voice-row">
-            <button class="voice-btn" onclick="startVoice('brand-keywords')">🎙️ Voice Input</button>
-            <span id="brand-voice-status" style="font-size:0.78rem;color:var(--muted);"></span>
-          </div>
+            <button class="theme-btn" onclick="toggleTheme()" title="Toggle theme">🌙</button>
         </div>
-        <div class="form-grid">
-          <div class="form-group">
-            <label>Industry</label>
-            <select class="form-select" id="brand-industry">
+    </nav>
+
+    <div class="layout">
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <h4>Tools</h4>
+            <div class="sidebar-tabs">
+                <button class="tab-btn active" onclick="switchTab('brand', this)">🔤 Brand Names</button>
+                <button class="tab-btn" onclick="switchTab('logo', this)">🎨 Logo Generator</button>
+                <button class="tab-btn" onclick="switchTab('content', this)">📝 Marketing Content</button>
+                <button class="tab-btn" onclick="switchTab('design', this)">🖌️ Design System</button>
+                <button class="tab-btn" onclick="switchTab('sentiment', this)">🧠 Review Analyzer</button>
+                <button class="tab-btn" onclick="switchTab('chat', this)">💬 Branding Chat</button>
+            </div>
+        </aside>
+
+        <!-- MAIN -->
+        <main class="main-content">
+
+            <!-- ── BRAND NAMES ── -->
+            <div id="panel-brand" class="tab-panel active">
+                <div class="page-header">
+                    <h1>🔤 Brand Names Generator</h1>
+                    <p>Enter keywords and generate creative, memorable brand names with AI.</p>
+                </div>
+                <div class="card">
+                    <div class="form-group">
+                        <label>Keywords / Themes</label>
+                        <input type="text" id="brand-keywords" placeholder="e.g., smart, innovative, affordable" />
+                        <div class="voice-row">
+                            <button class="voice-btn" onclick="startVoice('brand-keywords')">🎙️ Voice Input</button>
+                            <span id="brand-voice-status" style="font-size:0.78rem;color:var(--muted);"></span>
+                        </div>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Industry</label>
+                            <select class="form-select" id="brand-industry">
               <option>Technology</option><option>Healthcare</option><option>Finance</option>
               <option>E-Commerce</option><option>Food & Beverage</option><option>Fashion</option>
               <option>Education</option><option>Real Estate</option><option>Travel</option><option>Entertainment</option>
             </select>
-          </div>
-          <div class="form-group">
-            <label>Brand Tone</label>
-            <select class="form-select" id="brand-tone">
+                        </div>
+                        <div class="form-group">
+                            <label>Brand Tone</label>
+                            <select class="form-select" id="brand-tone">
               <option>Professional</option><option>Playful</option><option>Luxury</option>
               <option>Minimal</option><option>Bold</option><option>Friendly</option>
             </select>
-          </div>
-        </div>
-        <button class="btn btn-grad" id="brand-btn" onclick="generateBrand()">
+                        </div>
+                    </div>
+                    <button class="btn btn-grad" id="brand-btn" onclick="generateBrand()">
           <span class="btn-text">✨ Generate Brand Names</span>
         </button>
-        <div class="output-box hidden" id="brand-output"></div>
-      </div>
-    </div>
+                    <div class="output-box hidden" id="brand-output"></div>
+                </div>
+            </div>
 
-    <!-- ── LOGO GENERATOR ── -->
-    <div id="panel-logo" class="tab-panel">
-      <div class="page-header">
-        <h1>🎨 Logo Generator</h1>
-        <p>Generate logo concepts and AI-created images for your brand.</p>
-      </div>
-      <div class="card">
-        <div class="form-group">
-          <label>Brand Name</label>
-          <input type="text" id="logo-brand" placeholder="e.g., TechVision" />
-        </div>
-        <div class="form-grid">
-          <div class="form-group">
-            <label>Industry</label>
-            <select class="form-select" id="logo-industry">
+            <!-- ── LOGO GENERATOR ── -->
+            <div id="panel-logo" class="tab-panel">
+                <div class="page-header">
+                    <h1>🎨 Logo Generator</h1>
+                    <p>Generate logo concepts and AI-created images for your brand.</p>
+                </div>
+                <div class="card">
+                    <div class="form-group">
+                        <label>Brand Name</label>
+                        <input type="text" id="logo-brand" placeholder="e.g., TechVision" />
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Industry</label>
+                            <select class="form-select" id="logo-industry">
               <option>Technology</option><option>Healthcare</option><option>Finance</option>
               <option>E-Commerce</option><option>Food & Beverage</option><option>Fashion</option>
               <option>Education</option><option>Real Estate</option><option>Travel</option>
             </select>
-          </div>
-          <div class="form-group">
-            <label>Keywords / Style</label>
-            <input type="text" id="logo-keywords" placeholder="e.g., modern, minimalist, bold" />
-          </div>
-        </div>
-        <button class="btn btn-grad" id="logo-btn" onclick="generateLogo()">
+                        </div>
+                        <div class="form-group">
+                            <label>Keywords / Style</label>
+                            <input type="text" id="logo-keywords" placeholder="e.g., modern, minimalist, bold" />
+                        </div>
+                    </div>
+                    <button class="btn btn-grad" id="logo-btn" onclick="generateLogo()">
           <span class="btn-text">🖼️ Generate Logo & Image</span>
         </button>
-        <div class="output-box hidden" id="logo-output"></div>
-        <div class="logo-preview hidden" id="logo-preview">
-          <p style="font-size:0.8rem;color:var(--muted);margin-bottom:0.5rem;">Generated Image:</p>
-          <img id="logo-img" src="" alt="Generated Logo" />
-        </div>
-      </div>
-    </div>
+                    <div class="output-box hidden" id="logo-output"></div>
+                    <div class="logo-preview hidden" id="logo-preview">
+                        <p style="font-size:0.8rem;color:var(--muted);margin-bottom:0.5rem;">Generated Image:</p>
+                        <img id="logo-img" src="" alt="Generated Logo" />
+                    </div>
+                </div>
+            </div>
 
-    <!-- ── MARKETING CONTENT ── -->
-    <div id="panel-content" class="tab-panel">
-      <div class="page-header">
-        <h1>📝 Marketing Content</h1>
-        <p>Generate descriptions, posts, emails, and ad copy for your brand.</p>
-      </div>
-      <div class="card">
-        <div class="form-group">
-          <label>Brand Description</label>
-          <textarea id="content-desc" placeholder="Describe your brand, product, or service..."></textarea>
-        </div>
-        <div class="form-grid">
-          <div class="form-group">
-            <label>Tone</label>
-            <select class="form-select" id="content-tone">
+            <!-- ── MARKETING CONTENT ── -->
+            <div id="panel-content" class="tab-panel">
+                <div class="page-header">
+                    <h1>📝 Marketing Content</h1>
+                    <p>Generate descriptions, posts, emails, and ad copy for your brand.</p>
+                </div>
+                <div class="card">
+                    <div class="form-group">
+                        <label>Brand Description</label>
+                        <textarea id="content-desc" placeholder="Describe your brand, product, or service..."></textarea>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Tone</label>
+                            <select class="form-select" id="content-tone">
               <option value="Professional">Professional</option>
               <option value="Playful">Playful</option>
               <option value="Luxury">Luxury</option>
               <option value="Friendly">Friendly</option>
               <option value="Bold">Bold</option>
             </select>
-          </div>
-          <div class="form-group">
-            <label>Content Type</label>
-            <select class="form-select" id="content-type">
+                        </div>
+                        <div class="form-group">
+                            <label>Content Type</label>
+                            <select class="form-select" id="content-type">
               <option value="product_description">Product Description</option>
               <option value="social_post">Social Media Post</option>
               <option value="email">Marketing Email</option>
               <option value="ad_copy">Ad Copy</option>
               <option value="tagline">Tagline & Slogan</option>
             </select>
-          </div>
-        </div>
-        <button class="btn btn-grad" id="content-btn" onclick="generateContent()">
+                        </div>
+                    </div>
+                    <button class="btn btn-grad" id="content-btn" onclick="generateContent()">
           <span class="btn-text">📝 Generate Content</span>
         </button>
-        <div class="output-box hidden" id="content-output"></div>
-      </div>
-    </div>
+                    <div class="output-box hidden" id="content-output"></div>
+                </div>
+            </div>
 
-    <!-- ── DESIGN SYSTEM ── -->
-    <div id="panel-design" class="tab-panel">
-      <div class="page-header">
-        <h1>🖌️ Design System</h1>
-        <p>Get AI-generated color palettes, fonts, and visual identity guidance.</p>
-      </div>
-      <div class="card">
-        <div class="form-grid">
-          <div class="form-group">
-            <label>Brand Tone</label>
-            <select class="form-select" id="design-tone">
+            <!-- ── DESIGN SYSTEM ── -->
+            <div id="panel-design" class="tab-panel">
+                <div class="page-header">
+                    <h1>🖌️ Design System</h1>
+                    <p>Get AI-generated color palettes, fonts, and visual identity guidance.</p>
+                </div>
+                <div class="card">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Brand Tone</label>
+                            <select class="form-select" id="design-tone">
               <option>Professional</option><option>Playful</option><option>Luxury</option>
               <option>Minimal</option><option>Bold</option><option>Elegant</option><option>Friendly</option>
             </select>
-          </div>
-          <div class="form-group">
-            <label>Industry</label>
-            <select class="form-select" id="design-industry">
+                        </div>
+                        <div class="form-group">
+                            <label>Industry</label>
+                            <select class="form-select" id="design-industry">
               <option>Technology</option><option>Healthcare</option><option>Finance</option>
               <option>E-Commerce</option><option>Food & Beverage</option><option>Fashion</option>
               <option>Education</option><option>Real Estate</option>
             </select>
-          </div>
-        </div>
-        <button class="btn btn-grad" id="design-btn" onclick="getDesignSystem()">
+                        </div>
+                    </div>
+                    <button class="btn btn-grad" id="design-btn" onclick="getDesignSystem()">
           <span class="btn-text">🎨 Get Design System</span>
         </button>
-        <div class="output-box hidden" id="design-output"></div>
-      </div>
-    </div>
+                    <div class="output-box hidden" id="design-output"></div>
+                </div>
+            </div>
 
-    <!-- ── SENTIMENT ── -->
-    <div id="panel-sentiment" class="tab-panel">
-      <div class="page-header">
-        <h1>🧠 Review Analyzer</h1>
-        <p>Analyze customer reviews for sentiment, tone, and brand alignment.</p>
-      </div>
-      <div class="card">
-        <div class="form-group">
-          <label>Customer Review / Text</label>
-          <textarea id="sentiment-text" rows="5" placeholder="Paste the customer review or text to analyze..."></textarea>
-        </div>
-        <div class="form-group">
-          <label>Brand Tone Reference</label>
-          <select class="form-select" id="sentiment-tone">
+            <!-- ── SENTIMENT ── -->
+            <div id="panel-sentiment" class="tab-panel">
+                <div class="page-header">
+                    <h1>🧠 Review Analyzer</h1>
+                    <p>Analyze customer reviews for sentiment, tone, and brand alignment.</p>
+                </div>
+                <div class="card">
+                    <div class="form-group">
+                        <label>Customer Review / Text</label>
+                        <textarea id="sentiment-text" rows="5" placeholder="Paste the customer review or text to analyze..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Brand Tone Reference</label>
+                        <select class="form-select" id="sentiment-tone">
             <option>Professional</option><option>Friendly</option><option>Luxury</option>
             <option>Playful</option><option>Bold</option>
           </select>
-        </div>
-        <button class="btn btn-grad" id="sentiment-btn" onclick="analyzeSentiment()">
+                    </div>
+                    <button class="btn btn-grad" id="sentiment-btn" onclick="analyzeSentiment()">
           <span class="btn-text">🧠 Analyze &amp; Rewrite</span>
         </button>
-        <div class="output-box hidden" id="sentiment-output"></div>
-      </div>
+                    <div class="output-box hidden" id="sentiment-output"></div>
+                </div>
+            </div>
+
+            <!-- ── CHAT ── -->
+            <div id="panel-chat" class="tab-panel">
+                <div class="page-header">
+                    <h1>💬 Branding Chat</h1>
+                    <p>Ask BizForge AI anything about branding, naming, and brand strategy.</p>
+                </div>
+                <div class="card">
+                    <div class="chat-box" id="chat-messages">
+                        <div class="msg bot">👋 Hi! I'm BizForge Chat, powered by IBM Granite. Ask me anything about branding, naming, logos, or brand strategy!</div>
+                    </div>
+                    <div class="chat-input-row">
+                        <input type="text" id="chat-input" placeholder="e.g., What makes a great brand name?" onkeydown="if(event.key==='Enter')sendChat()" />
+                        <button class="btn btn-grad" onclick="sendChat()" style="width:auto;">Send →</button>
+                    </div>
+                </div>
+            </div>
+
+        </main>
     </div>
 
-    <!-- ── CHAT ── -->
-    <div id="panel-chat" class="tab-panel">
-      <div class="page-header">
-        <h1>💬 Branding Chat</h1>
-        <p>Ask BizForge AI anything about branding, naming, and brand strategy.</p>
-      </div>
-      <div class="card">
-        <div class="chat-box" id="chat-messages">
-          <div class="msg bot">👋 Hi! I'm BizForge Chat, powered by IBM Granite. Ask me anything about branding, naming, logos, or brand strategy!</div>
-        </div>
-        <div class="chat-input-row">
-          <input type="text" id="chat-input" placeholder="e.g., What makes a great brand name?" onkeydown="if(event.key==='Enter')sendChat()" />
-          <button class="btn btn-grad" onclick="sendChat()" style="width:auto;">Send →</button>
-        </div>
-      </div>
-    </div>
+    <script>
+        const API = window.location.origin;
 
-  </main>
-</div>
+        // ── THEME ──
+        let isDark = true;
 
-<script>
-  const API = window.location.origin;
+        function toggleTheme() {
+            isDark = !isDark;
+            document.body.classList.toggle('light', !isDark);
+            document.querySelector('.theme-btn').textContent = isDark ? '🌙' : '☀️';
+        }
 
-  // ── THEME ──
-  let isDark = true;
-  function toggleTheme() {
-    isDark = !isDark;
-    document.body.classList.toggle('light', !isDark);
-    document.querySelector('.theme-btn').textContent = isDark ? '🌙' : '☀️';
-  }
-  function changeLanguage(lang) { localStorage.setItem('bf_lang', lang); }
+        function changeLanguage(lang) {
+            localStorage.setItem('bf_lang', lang);
+        }
 
-  // ── TABS ──
-  function switchTab(tab, btn) {
-    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-    document.getElementById('panel-' + tab).classList.add('active');
-    btn.classList.add('active');
-    window.history.replaceState(null, '', '/branding?tab=' + tab);
-  }
+        // ── TABS ──
+        function switchTab(tab, btn) {
+            document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById('panel-' + tab).classList.add('active');
+            btn.classList.add('active');
+            window.history.replaceState(null, '', '/branding?tab=' + tab);
+        }
 
-  // Init tab from URL
-  window.addEventListener('DOMContentLoaded', () => {
-    const params = new URLSearchParams(window.location.search);
-    const tab = params.get('tab');
-    if (tab) {
-      const btn = document.querySelector(`[onclick="switchTab('${tab}', this)"]`);
-      if (btn) switchTab(tab, btn);
-    }
-  });
+        // Init tab from URL
+        window.addEventListener('DOMContentLoaded', () => {
+            const params = new URLSearchParams(window.location.search);
+            const tab = params.get('tab');
+            if (tab) {
+                const btn = document.querySelector(`[onclick="switchTab('${tab}', this)"]`);
+                if (btn) switchTab(tab, btn);
+            }
+        });
 
-  // ── HELPERS ──
-  function setLoading(btnId, loading) {
-    const btn = document.getElementById(btnId);
-    const text = btn.querySelector('.btn-text');
-    btn.disabled = loading;
-    text.innerHTML = loading ? '<span class="spinner"></span> Generating...' : text.dataset.orig || text.innerHTML;
-    if (!text.dataset.orig && !loading) return;
-    if (!text.dataset.orig) text.dataset.orig = text.innerHTML;
-  }
+        // ── HELPERS ──
+        const originalTexts = {};
 
-  function showOutput(id, text, isError = false) {
-    const el = document.getElementById(id);
-    el.classList.remove('hidden', 'error');
-    if (isError) el.classList.add('error');
-    el.textContent = text;
-  }
+        function setLoading(btnId, loading) {
+            const btn = document.getElementById(btnId);
+            const text = btn.querySelector('.btn-text');
+            if (loading) {
+                originalTexts[btnId] = text.innerHTML;
+                btn.disabled = true;
+                text.innerHTML = '<span class="spinner"></span> Generating...';
+            } else {
+                btn.disabled = false;
+                text.innerHTML = originalTexts[btnId] || text.innerHTML;
+            }
+        }
 
-  async function apiPost(endpoint, body) {
-    const res = await fetch(API + endpoint, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body),
-    });
-    if (!res.ok) {
-      const err = await res.json().catch(() => ({ detail: res.statusText }));
-      throw new Error(err.detail || 'API error');
-    }
-    return res.json();
-  }
+        function showOutput(id, text, isError = false) {
+            const el = document.getElementById(id);
+            el.classList.remove('hidden', 'error');
+            if (isError) el.classList.add('error');
+            el.textContent = text;
+        }
 
-  // ── BRAND NAMES ──
-  async function generateBrand() {
-    const keywords = document.getElementById('brand-keywords').value.trim();
-    if (!keywords) { showOutput('brand-output', '⚠️ Please enter keywords first.', true); return; }
-    setLoading('brand-btn', true);
-    try {
-      const data = await apiPost('/api/generate-brand', {
-        industry: document.getElementById('brand-industry').value,
-        keywords,
-        tone: document.getElementById('brand-tone').value,
-        language: localStorage.getItem('bf_lang') || 'en',
-      });
-      showOutput('brand-output', data.data);
-    } catch(e) { showOutput('brand-output', '❌ Error: ' + e.message, true); }
-    setLoading('brand-btn', false);
-  }
+        async function apiPost(endpoint, body) {
+            const res = await fetch(API + endpoint, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(body),
+            });
+            if (!res.ok) {
+                const err = await res.json().catch(() => ({
+                    detail: res.statusText
+                }));
+                throw new Error(err.detail || 'API error');
+            }
+            return res.json();
+        }
 
-  // ── LOGO ──
-  async function generateLogo() {
-    const brandName = document.getElementById('logo-brand').value.trim();
-    if (!brandName) { showOutput('logo-output', '⚠️ Please enter a brand name.', true); return; }
-    setLoading('logo-btn', true);
-    document.getElementById('logo-preview').classList.add('hidden');
-    try {
-      const data = await apiPost('/api/generate-logo', {
-        brand_name: brandName,
-        industry: document.getElementById('logo-industry').value,
-        keywords: document.getElementById('logo-keywords').value,
-      });
-      showOutput('logo-output', data.data.logo_prompt);
-      if (data.data.image_url) {
-        const preview = document.getElementById('logo-preview');
-        document.getElementById('logo-img').src = data.data.image_url;
-        preview.classList.remove('hidden');
-      } else if (data.data.image_error) {
-        showOutput('logo-output', data.data.logo_prompt + '\n\n⚠️ Image generation note: ' + data.data.image_error);
-      }
-    } catch(e) { showOutput('logo-output', '❌ Error: ' + e.message, true); }
-    setLoading('logo-btn', false);
-  }
+        // ── BRAND NAMES ──
+        async function generateBrand() {
+            const keywords = document.getElementById('brand-keywords').value.trim();
+            if (!keywords) {
+                showOutput('brand-output', '⚠️ Please enter keywords first.', true);
+                return;
+            }
+            setLoading('brand-btn', true);
+            try {
+                const data = await apiPost('/api/generate-brand', {
+                    industry: document.getElementById('brand-industry').value,
+                    keywords,
+                    tone: document.getElementById('brand-tone').value,
+                    language: localStorage.getItem('bf_lang') || 'en',
+                });
+                showOutput('brand-output', data.data);
+            } catch (e) {
+                showOutput('brand-output', '❌ Error: ' + e.message, true);
+            }
+            setLoading('brand-btn', false);
+        }
 
-  // ── CONTENT ──
-  async function generateContent() {
-    const desc = document.getElementById('content-desc').value.trim();
-    if (!desc) { showOutput('content-output', '⚠️ Please enter a brand description.', true); return; }
-    setLoading('content-btn', true);
-    try {
-      const data = await apiPost('/api/generate-content', {
-        brand_description: desc,
-        tone: document.getElementById('content-tone').value,
-        content_type: document.getElementById('content-type').value,
-        language: localStorage.getItem('bf_lang') || 'en',
-      });
-      showOutput('content-output', data.data);
-    } catch(e) { showOutput('content-output', '❌ Error: ' + e.message, true); }
-    setLoading('content-btn', false);
-  }
+        // ── LOGO ──
+        async function generateLogo() {
+            const brandName = document.getElementById('logo-brand').value.trim();
+            if (!brandName) {
+                showOutput('logo-output', '⚠️ Please enter a brand name.', true);
+                return;
+            }
+            setLoading('logo-btn', true);
+            document.getElementById('logo-preview').classList.add('hidden');
+            try {
+                const data = await apiPost('/api/generate-logo', {
+                    brand_name: brandName,
+                    industry: document.getElementById('logo-industry').value,
+                    keywords: document.getElementById('logo-keywords').value,
+                });
+                showOutput('logo-output', data.data.logo_prompt);
+                if (data.data.image_url) {
+                    const preview = document.getElementById('logo-preview');
+                    document.getElementById('logo-img').src = data.data.image_url;
+                    preview.classList.remove('hidden');
+                } else if (data.data.image_error) {
+                    showOutput('logo-output', data.data.logo_prompt + '\n\n⚠️ Image generation note: ' + data.data.image_error);
+                }
+            } catch (e) {
+                showOutput('logo-output', '❌ Error: ' + e.message, true);
+            }
+            setLoading('logo-btn', false);
+        }
 
-  // ── DESIGN SYSTEM ──
-  async function getDesignSystem() {
-    setLoading('design-btn', true);
-    try {
-      const data = await apiPost('/api/get-colors', {
-        tone: document.getElementById('design-tone').value,
-        industry: document.getElementById('design-industry').value,
-      });
-      showOutput('design-output', data.data);
-    } catch(e) { showOutput('design-output', '❌ Error: ' + e.message, true); }
-    setLoading('design-btn', false);
-  }
+        // ── CONTENT ──
+        async function generateContent() {
+            const desc = document.getElementById('content-desc').value.trim();
+            if (!desc) {
+                showOutput('content-output', '⚠️ Please enter a brand description.', true);
+                return;
+            }
+            setLoading('content-btn', true);
+            try {
+                const data = await apiPost('/api/generate-content', {
+                    brand_description: desc,
+                    tone: document.getElementById('content-tone').value,
+                    content_type: document.getElementById('content-type').value,
+                    language: localStorage.getItem('bf_lang') || 'en',
+                });
+                showOutput('content-output', data.data);
+            } catch (e) {
+                showOutput('content-output', '❌ Error: ' + e.message, true);
+            }
+            setLoading('content-btn', false);
+        }
 
-  // ── SENTIMENT ──
-  async function analyzeSentiment() {
-    const text = document.getElementById('sentiment-text').value.trim();
-    if (!text) { showOutput('sentiment-output', '⚠️ Please enter text to analyze.', true); return; }
-    setLoading('sentiment-btn', true);
-    try {
-      const data = await apiPost('/api/analyze-sentiment', {
-        text,
-        brand_tone: document.getElementById('sentiment-tone').value,
-      });
-      showOutput('sentiment-output', data.data);
-    } catch(e) { showOutput('sentiment-output', '❌ Error: ' + e.message, true); }
-    setLoading('sentiment-btn', false);
-  }
+        // ── DESIGN SYSTEM ──
+        async function getDesignSystem() {
+            setLoading('design-btn', true);
+            try {
+                const data = await apiPost('/api/get-colors', {
+                    tone: document.getElementById('design-tone').value,
+                    industry: document.getElementById('design-industry').value,
+                });
+                showOutput('design-output', data.data);
+            } catch (e) {
+                showOutput('design-output', '❌ Error: ' + e.message, true);
+            }
+            setLoading('design-btn', false);
+        }
 
-  // ── CHAT ──
-  async function sendChat() {
-    const input = document.getElementById('chat-input');
-    const msg = input.value.trim();
-    if (!msg) return;
-    input.value = '';
+        // ── SENTIMENT ──
+        async function analyzeSentiment() {
+            const text = document.getElementById('sentiment-text').value.trim();
+            if (!text) {
+                showOutput('sentiment-output', '⚠️ Please enter text to analyze.', true);
+                return;
+            }
+            setLoading('sentiment-btn', true);
+            try {
+                const data = await apiPost('/api/analyze-sentiment', {
+                    text,
+                    brand_tone: document.getElementById('sentiment-tone').value,
+                });
+                showOutput('sentiment-output', data.data);
+            } catch (e) {
+                showOutput('sentiment-output', '❌ Error: ' + e.message, true);
+            }
+            setLoading('sentiment-btn', false);
+        }
 
-    const box = document.getElementById('chat-messages');
-    // User bubble
-    const userDiv = document.createElement('div');
-    userDiv.className = 'msg user';
-    userDiv.textContent = msg;
-    box.appendChild(userDiv);
-    box.scrollTop = box.scrollHeight;
+        // ── CHAT ──
+        async function sendChat() {
+            const input = document.getElementById('chat-input');
+            const msg = input.value.trim();
+            if (!msg) return;
+            input.value = '';
 
-    // Loading bubble
-    const loadDiv = document.createElement('div');
-    loadDiv.className = 'msg bot';
-    loadDiv.innerHTML = '<span class="spinner"></span> Thinking...';
-    box.appendChild(loadDiv);
-    box.scrollTop = box.scrollHeight;
+            const box = document.getElementById('chat-messages');
+            // User bubble
+            const userDiv = document.createElement('div');
+            userDiv.className = 'msg user';
+            userDiv.textContent = msg;
+            box.appendChild(userDiv);
+            box.scrollTop = box.scrollHeight;
 
-    try {
-      const data = await apiPost('/api/chat', { message: msg });
-      loadDiv.innerHTML = '🤖 ' + (data.data.content || data.data);
-    } catch(e) {
-      loadDiv.classList.add('error');
-      loadDiv.textContent = '❌ Error: ' + e.message;
-    }
-    box.scrollTop = box.scrollHeight;
-  }
+            // Loading bubble
+            const loadDiv = document.createElement('div');
+            loadDiv.className = 'msg bot';
+            loadDiv.innerHTML = '<span class="spinner"></span> Thinking...';
+            box.appendChild(loadDiv);
+            box.scrollTop = box.scrollHeight;
 
-  // ── VOICE INPUT ──
-  function startVoice(targetId) {
-    if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
-      document.getElementById('brand-voice-status').textContent = '❌ Voice not supported in this browser';
-      return;
-    }
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    const recognition = new SpeechRecognition();
-    recognition.lang = 'en-US';
-    const btn = document.querySelector('.voice-btn');
-    const status = document.getElementById('brand-voice-status');
-    btn.classList.add('recording');
-    status.textContent = '🎙️ Listening...';
-    recognition.start();
-    recognition.onresult = (e) => {
-      document.getElementById(targetId).value = e.results[0][0].transcript;
-      status.textContent = '✅ Done';
-      btn.classList.remove('recording');
-    };
-    recognition.onerror = () => { status.textContent = '❌ Error'; btn.classList.remove('recording'); };
-    recognition.onend = () => { btn.classList.remove('recording'); };
-  }
-</script>
+            try {
+                const data = await apiPost('/api/chat', {
+                    message: msg
+                });
+                loadDiv.innerHTML = '🤖 ' + (data.data.content || data.data);
+            } catch (e) {
+                loadDiv.classList.add('error');
+                loadDiv.textContent = '❌ Error: ' + e.message;
+            }
+            box.scrollTop = box.scrollHeight;
+        }
+
+        // ── VOICE INPUT ──
+        function startVoice(targetId) {
+            if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+                document.getElementById('brand-voice-status').textContent = '❌ Voice not supported in this browser';
+                return;
+            }
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            const recognition = new SpeechRecognition();
+            recognition.lang = 'en-US';
+            const btn = document.querySelector('.voice-btn');
+            const status = document.getElementById('brand-voice-status');
+            btn.classList.add('recording');
+            status.textContent = '🎙️ Listening...';
+            recognition.start();
+            recognition.onresult = (e) => {
+                document.getElementById(targetId).value = e.results[0][0].transcript;
+                status.textContent = '✅ Done';
+                btn.classList.remove('recording');
+            };
+            recognition.onerror = () => {
+                status.textContent = '❌ Error';
+                btn.classList.remove('recording');
+            };
+            recognition.onend = () => {
+                btn.classList.remove('recording');
+            };
+        }
+    </script>
 </body>
+
 </html>
